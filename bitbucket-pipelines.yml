@@ -1,0 +1,20 @@
+image: node:24.13.0
+
+definitions:
+  caches:
+    pnpm: .pnpm-store
+
+pipelines:
+  pull-requests:
+    '**':
+      - step:
+          name: "Auditoría de código"
+          caches:
+            - pnpm
+          script:
+            - npm install -g pnpm
+            - pnpm config set store-dir .pnpm-store
+            - pnpm install
+            - pnpm exec astro check
+            - pnpm run lint
+            - pnpm exec prettier --check .
