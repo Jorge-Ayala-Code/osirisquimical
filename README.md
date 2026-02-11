@@ -67,12 +67,14 @@ src/
 ### Pasos
 
 1.  **Clonar repositorio**
+
     ```bash
     git clone git@bitbucket.org:horuschemical/horuschemical.mx.git
     cd horuschemical.mx
     ```
 
 2.  **Instalar dependencias**
+
     ```bash
     pnpm install
     # o
@@ -92,7 +94,7 @@ src/
 | `pnpm install`         | Instala dependencias                                            |
 | `pnpm run dev`         | Inicia el servidor de desarrollo local.                         |
 | `pnpm run build`       | Genera el build de producción (carpeta `/dist`).                |
-| `pnpm run preview`     | Sirve la carpeta `/dist` localmente para probar el build final.  |
+| `pnpm run preview`     | Sirve la carpeta `/dist` localmente para probar el build final. |
 | `pnpm astro ...`       | Ejecuta comandos CLI como `astro add`, `astro check`            |
 | `pnpm astro -- --help` | Obtiene ayuda para utilizar Astro CLI                           |
 | `pnpm lint`            | Ejecuta ESLint sobre el código fuente                           |

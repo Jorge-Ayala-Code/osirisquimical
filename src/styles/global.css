@@ -1,7 +1,13 @@
 @import 'tailwindcss';
-
 @theme {
   --color-hc-black: #15171c;
+  --color-hc-primary: #003366;
+  --color-hc-secondary: #0047ab;
+  --color-hc-accent: #d4af37;
+  --color-hc-background: #f5f7fa;
+  --color-hc-cards: #e6e9ef;
+  --color-hc-text: #2b2e34;
+  --color-hc-secondary-text: #6b7280;
 
   --font-sans: Inter, system-ui, sans-serif;
   --font-heading: Inter, system-ui, sans-serif;

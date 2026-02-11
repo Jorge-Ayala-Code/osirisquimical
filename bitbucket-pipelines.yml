@@ -8,7 +8,7 @@ pipelines:
   pull-requests:
     '**':
       - step:
-          name: "Auditoría de código"
+          name: 'Auditoría de código'
           caches:
             - pnpm
           script:
