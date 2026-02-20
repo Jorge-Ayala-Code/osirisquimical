@@ -1,0 +1,57 @@
+---
+import sprite from "../../assets/icons/spritecss.svg?url";
+import Button from "../ui/Button.astro";
+
+const location = `--x: 0%; --y: 100%;`;
+
+const maskBase = `mask-image: url(${sprite}); 
+-webkit-mask-image: url(${sprite}); 
+mask-size: 300% 300%; 
+-webkit-mask-size: 300% 300%; 
+mask-repeat: no-repeat; 
+-webkit-mask-repeat: no-repeat;`;
+---
+<div class="max-w-2xl text-center mx-auto mb-10">
+  <h3 class="text-3xl font-bold tracking-tight text-hc-text sm:text-4xl">
+    Impulsemos juntos la eficiencia de tu industria
+  </h3>
+</div>
+<div class="flex flex-col gap-10 py-16 lg:flex-row lg:items-start">
+  <div class="w-full lg:w-1/2">
+    <form action="#" method="POST" class="grid grid-cols-1 gap-y-4">
+      <input type="text" name="name" id="name" required class="block w-full rounded-md border-0 py-3 px-3.5 text-hc-secondary-text shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-hc-secondary sm:text-sm" placeholder="Nombre completo" />
+      <input type="email" name="email" id="email" required class="block w-full rounded-md border-0 py-3 px-3.5 text-hc-secondary-text shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-hc-secondary sm:text-sm" placeholder="Correo electrónico" />
+      <input type="tel" name="phone" id="phone" required class="block w-full rounded-md border-0 py-3 px-3.5 text-hc-secondary-text shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-hc-secondary sm:text-sm" placeholder="Teléfono" />
+      <input type="text" name="company" id="company" required class="block w-full rounded-md border-0 py-3 px-3.5 text-hc-secondary-text shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-hc-secondary sm:text-sm" placeholder="Nombre de empresa" />
+      <textarea id="message" name="message" rows="4" required class="block w-full rounded-md border-0 py-3 px-3.5 text-hc-secondary-text shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-1 focus:ring-hc-secondary sm:text-sm" placeholder="Mensaje"></textarea>
+      <Button 
+        type="submit" 
+        class="w-full bg-hc-primary hover:bg-hc-secondary text-white py-3 rounded-md font-semibold hover:bg-opacity-90 transition-all"
+        aria-label="Boton de enviar formulario">
+        Enviar mensaje
+      </Button>
+    </form>
+  </div>
+  <div class="flex flex-col items-center w-full lg:w-1/2 gap-4">
+    <div class="w-full h-81.25 lg:h-86 rounded-lg overflow-hidden shadow-lg border border-gray-200">
+      <iframe 
+        title="Ubicación de Horus Chemical en Google Maps"
+        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d5471.832373466727!2d-99.26621478767218!3d19.583556005146004!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x85d21c6e59b95555%3A0x3b3dd159e90e243b!2sHorus%20Chemical%20S.A.%20de%20C.V!5e0!3m2!1ses-419!2smx!4v1771440170419!5m2!1ses-419!2smx" 
+        width="100%" 
+        height="100%"
+        style="border:0;" 
+        allowfullscreen="" 
+        loading="lazy" 
+        referrerpolicy="no-referrer-when-downgrade">
+      </iframe>
+    </div>
+    <div class="flex items-center justify-center gap-2">
+      <div class="w-9 h-9 text-hc-primary shrink-0 bg-current inline-block" 
+        style={`${maskBase} mask-position: var(--x) var(--y); -webkit-mask-position: var(--x) var(--y); ${location}`}>
+      </div>
+      <p class="max-w-xs text-sm md:text-base text-hc-text text-left">
+        Zacatecas 15, Adolfo Lopez Mateos, 52910 Cdad. López Mateos, Méx.
+      </p>
+    </div>
+  </div>
+</div>

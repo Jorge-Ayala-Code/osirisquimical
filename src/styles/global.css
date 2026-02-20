@@ -4,10 +4,10 @@
   --color-hc-primary: #003366;
   --color-hc-secondary: #0047ab;
   --color-hc-accent: #d4af37;
-  --color-hc-background: #f5f7fa;
+  --color-hc-background: #EBEBEB;
   --color-hc-cards: #e6e9ef;
-  --color-hc-text: #2b2e34;
-  --color-hc-secondary-text: #6b7280;
+  --color-hc-text: #505050;
+  --color-hc-secondary-text: #808080;
 
   --font-sans: Inter, system-ui, sans-serif;
   --font-heading: Inter, system-ui, sans-serif;

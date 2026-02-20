@@ -1,8 +1,17 @@
 ---
 import MainLayout from '../layouts/MainLayout.astro';
+import Hero from "../components/home/Hero.astro";
 import Welcome from "../components/home/Welcome.astro";
+import Contact from "../components/home/Contact.astro";
+import Section from "../components/ui/Section.astro";
 ---
 
 <MainLayout>
-  <Welcome/>
+  <Hero />
+  <Section id="welcome">
+    <Welcome />
+  </Section>
+  <Section id="Contact">
+    <Contact />
+  </Section>
 </MainLayout> 

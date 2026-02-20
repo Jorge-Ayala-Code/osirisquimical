@@ -1,18 +1,84 @@
-<footer class="bg-green-900 text-white py-10 mt-auto">
-  <div class="container mx-auto px-4 grid grid-cols-1 md:grid-cols-3 gap-8 items-center">
-    <div class="flex justify-center md:justify-start">
-      <img src="../src/assets/images/Horus.png" alt="Horus Chemical Logo" class="h-20 w-auto transition-all"/>
+---
+import sprite from "../../assets/icons/spritecss.svg?url";
+
+const facebook = `--x: 0%; --y: 0%;`;
+const linkedin = `--x: 100%; --y: 0%;`;
+const mail = `--x: 0%; --y: 50%;`;
+const phone = `--x: 50%; --y: 50%;`;
+const location = `--x: 0%; --y: 100%;`;
+
+const maskBase = 
+`mask-image: url(${sprite}); 
+-webkit-mask-image: url(${sprite}); mask-size: 300% 300%; 
+-webkit-mask-size: 300% 300%; mask-repeat: no-repeat; 
+-webkit-mask-repeat: no-repeat;`;
+
+const nav = [
+  {href: "#", label: "Nosotros"},
+  {href: "#", label: "Productos"},
+  {href: "#", label: "Servicios"},
+  {href: "#", label: "Contacto"},
+  {href: "#", label: "Aviso de privacidad"},
+];
+
+const contact = [
+  { Icon: location , text: "Zacatecas 15, Adolfo Lopez Mateos, 52910 Cdad. López Mateos, Méx."},
+  { Icon: phone , text:"(55)-58-25-96-52" },
+  { Icon: mail , text: "Ventas@horuschemical.com.mx"}
+];
+
+const socialMedia = [
+  { Icon: facebook , href: "https://www.facebook.com/p/Horus-Chemical-SA-de-CV-100066616406227/?locale=es_LA"},
+  { Icon: linkedin , href: "https://www.linkedin.com/in/horus-chemical-30bb232b9/" }
+];
+---
+
+<footer class="bg-hc-primary text-white py-10 mt-auto">
+  <div class="mx-auto max-w-225 px-4">
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-10">
+      <div class="flex flex-col items-center text-center">
+        <img src="/src/assets/images/Logo-Horus.svg" alt="Horus_Chemical_Logo" class="h-24 w-auto mb-3"/>
+        <i>Innovación Química para un Futuro Sostenible</i>
+      </div>
+      <div class="flex flex-col mb-4 items-center text-center tracking-wider mt-4">
+        <ul class="flex flex-col space-y-2"> 
+          {nav.map((item) => (
+            <li><a href={item.href} class="hover:text-hc-secondary transition-colors">{item.label}</a></li>
+          ))}
+        </ul>
+      </div>
+      <div class="flex flex-col items-center text-center">
+        <h4 class="font-bold mb-4 text-sm uppercase tracking-wider">Contactanos</h4>
+        <div class="space-y-4">
+          {contact.map(({ Icon, text }) => (
+            <div class="flex flex-col items-center gap-1">
+              <div 
+                class="w-5 h-5 bg-white inline-block" 
+                style={`${maskBase} mask-position: var(--x) var(--y); -webkit-mask-position: var(--x) var(--y); ${Icon}`}>
+              </div>
+              <span>{text}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+      <div class="flex flex-col items-center text-center">
+        <h4 class="font-bold mb-4 text-sm uppercase tracking-wider">Síguenos</h4>
+        <ul class="flex flex-row space-x-2">
+          {socialMedia.map(({ Icon, href }) => (
+            <li>
+              <a href={href} target="_blank" rel="noopener noreferrer" class="hover:scale-110 inline-block transition-transform">
+                <div 
+                  class="w-10 h-10 bg-white inline-block" 
+                  style={`${maskBase} mask-position: var(--x) var(--y); -webkit-mask-position: var(--x) var(--y); ${Icon}`}
+                ></div>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div> 
     </div>
-    <div class="text-center">
-      <p class="text-sm opacity-80">
-        &copy; {new Date().getFullYear()} Horus Chemical. Todos los derechos reservados.
-      </p>
-    </div>
-    <div class="text-center">
-      <ul class="flex justify-center space-x-6">
-        <li><a href="#" class="hover:text-green-400 transition-colors">Facebook</a></li>
-        <li><a href="#" class="hover:text-green-400 transition-colors">LinkedIn</a></li>
-      </ul>
+    <div class="text-center mt-12 border-t border-white/10 pt-6 text-sm opacity-50">
+      <p>&copy; {new Date().getFullYear()} Horus Chemical. Todos los derechos reservados.</p> 
     </div>
   </div>
 </footer>

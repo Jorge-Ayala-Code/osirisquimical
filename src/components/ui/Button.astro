@@ -1,12 +1,63 @@
-<button id="menu-button" class="md:hidden p-2 text-gray-600 rounded-lg">
-  <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-    <path id="menu-icon" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
-  </svg>
+---
+interface Props {
+  targetId?: string;
+  class?: string;
+  action?: 'menu' | 'scroll' | 'none';
+  type?: 'button' | 'submit' | 'reset';
+}
+
+const { 
+  targetId, 
+  class: className = "", 
+  action = "none",
+  type = "button" 
+} = Astro.props;
+---
+
+<button 
+  type={type}
+  data-target={targetId} 
+  data-action={action}
+  class:list={[className]}> 
+  <slot />
 </button>
+
 <script>
-  const menuButton = document.getElementById('menu-button');
-  const mobileMenu = document.getElementById('mobile-menu');
-  menuButton?.addEventListener('click', () => {
-    mobileMenu?.classList.toggle('hidden');
+  document.addEventListener("DOMContentLoaded", () => {
+  const menuButtons = document.querySelectorAll('[data-target]');
+  menuButtons.forEach((button) => {
+    button.addEventListener('click', () => {
+      const targetId = button.getAttribute('data-target');
+      if (!targetId) return;
+      const mobileMenu = document.getElementById(targetId);
+      if (!mobileMenu) return;
+      mobileMenu.classList.toggle('opacity-100');
+      mobileMenu.classList.toggle('translate-y-0');
+      mobileMenu.classList.toggle('pointer-events-none');
+      const icons = button.querySelectorAll('.menu-icon');
+      icons.forEach(icon => {
+        icon.classList.toggle('hidden');
+      });
+    });
   });
+});
+
+const initScroll = () => {
+  const scrollButtons = document.querySelectorAll<HTMLButtonElement>('.scroll-button');
+  scrollButtons.forEach((button) => {
+    button.addEventListener('click', () => {
+      const targetId = button.getAttribute('data-target');
+        if (!targetId) return;
+        const targetElement = document.getElementById(targetId);
+        if (targetElement) {
+          targetElement.scrollIntoView({ 
+            behavior: 'smooth',
+            block: 'start' 
+        });
+      }
+    });
+  });
+};
+document.addEventListener('astro:page-load', initScroll);
+document.addEventListener('DOMContentLoaded', initScroll);
 </script>
