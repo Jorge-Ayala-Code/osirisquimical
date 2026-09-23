@@ -1,10 +1,11 @@
-# 🧪 Horus Chemical
+# 🧪 Osiris Quimical "("Horus Chemical")"
 
 ![Astro](https://img.shields.io/badge/Astro-BC52EE?style=for-the-badge&logo=astro&logoColor=white)
 ![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)
 ![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)
 ![Vercel](https://img.shields.io/badge/Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white)
 
+Esta es una versión alterna de la pagina web de la empresa Horus Chemical, el motivo de cambio de logos y de contenido es por proteccion de derechos de autor.
 Sitio web corporativo desarrollado con **Astro** utilizando Static Site Generation (**SSG**). El proyecto está enfocado en **alto rendimiento, SEO técnico, accesibilidad (a11y) y escalabilidad**, siguiendo estrictas buenas prácticas de desarrollo y documentación.
 
 ## Tabla de Contenidos
