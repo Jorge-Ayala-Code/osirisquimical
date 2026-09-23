@@ -1,0 +1,45 @@
+---
+import Section from '../../components/ui/Section.astro';
+import MainLayout from '../../layouts/MainLayout.astro';
+import { getLangHelpers } from '../../i18n/utils';
+
+const { t, lang, l } = getLangHelpers(Astro.currentLocale);
+---
+
+<MainLayout>
+  <div class="py-14 bg-hc-primary"></div>
+  <Section id="not-fount">
+  <div class="flex items-center justify-center min-h-[70vh] px-4">
+    <div class="w-full max-w-225 bg-[#f4f7f4] rounded-[2.5rem] p-10 md:p-16 shadow-lg text-center">
+      <div class="mb-4">
+        <h1 class="font-bold text-4xl tracking-widest">404</h1>
+      </div>
+      <h1 class="text-3xl md:text-2xl font-bold text-black uppercase tracking-tight mb-6">
+        {t('not_found_title')}
+      </h1>
+      <p class="text-gray-600 text-lg leading-relaxed mb-10 px-4">
+        {t('not_found_text')}
+      </p>
+      <div class="flex flex-col sm:flex-row gap-6 justify-center items-center">
+        <!-- Usamos l("/") para que redirija a /en/ si está en inglés o a / si está en español -->
+        <a 
+          href={l("/")} 
+          class="w-full sm:w-auto px-10 py-3 bg-hc-primary hover:opacity-90 text-white rounded-xl font-bold transition-all text-center">
+          {t('not_found_btn_home')}
+        </a>
+        <!-- Usamos l("/products") -->
+        <a 
+          href={l("/products")} 
+          class="w-full sm:w-auto px-10 py-3 border-2 border-black text-black rounded-xl font-bold hover:bg-white transition-all text-center">
+          {t('not_found_btn_products')}
+        </a>
+      </div>
+      <div class="mt-12 pt-6 border-t border-gray-300">
+        <p class="text-sm text-gray-500">
+          {t('not_found_help_text')} <a href={l("/contact")} class="font-bold text-hc-primary hover:underline ml-1">{t('not_found_help_link')}</a>
+        </p>
+      </div>
+    </div>
+  </div>
+  </Section>
+</MainLayout>

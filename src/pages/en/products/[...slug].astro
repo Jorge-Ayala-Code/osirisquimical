@@ -1,0 +1,214 @@
+---
+import { getCollection } from 'astro:content';
+import MainLayout from '../../../layouts/MainLayout.astro';
+import Section from "../../../components/ui/Section.astro"
+import Button from '../../../components/ui/Button.astro';
+import { getLangHelpers } from '../../../i18n/utils';
+
+const { t, l } = getLangHelpers(Astro.currentLocale || 'es');
+
+export async function getStaticPaths() {
+  const productEntries = await getCollection('products');
+  return productEntries.map(entry => ({
+    params: { slug: entry.id }, props: { entry },
+  }));
+}
+
+const productsUrl = l("/products");
+const { pathname } = Astro.url;
+const isProductPage = pathname.includes('en/products');
+
+const { entry } = Astro.props;
+const { 
+  name, 
+  description, 
+  category, 
+  key, 
+  image, 
+  presentations,
+  content,
+  pictograms = []
+} = entry.data;
+
+const pictogramMap: Record<string, string> = {
+  harmful: "/images/pictograms/ghs-harmful.svg",
+  flammable: "/images/pictograms/ghs-flammable.svg",
+  corrosive: "/images/pictograms/ghs-corrosive.svg",
+  gas: "/images/pictograms/ghs-gas.svg",
+  toxic: "/images/pictograms/ghs-toxic.svg",
+  environments: "/images/pictograms/ghs-environment.svg",
+  explosives: "/images/pictograms/ghs-explosive.svg",
+  health: "/images/pictograms/ghs-health.svg",
+  oxidizen: "/images/pictograms/ghs-oxidizer.svg"
+};
+---
+
+<MainLayout title={`${name} | Horus Chemical`}>
+  <div class="py-14 bg-hc-primary"></div>
+<Section id={`${name}`} isDetail={true}>
+  <article class="max-w-7xl mx-auto"> 
+    <div class="grid grid-cols-1 md:grid-cols-5 gap-12 items-start mb-12">
+      <div class="md:col-span-2 space-y-4 flex flex-col items-center">
+        <div class="max-w-xs h-104 w-full mx-auto rounded-xl border border-hc-banner bg-hc-desing p-6 shadow-sm overflow-hidden flex items-center justify-center aspect-square" id="zoom-container">
+          <img 
+            id="main-image"
+            src={image} 
+            alt={name} 
+            class="w-full max-h-full object-contain transition-opacity duration-300 transform-gpu cursor-zoom-in"/>
+        </div>
+      </div>
+      <div class="md:col-span-3 flex flex-col">
+        <nav class="flex items-center gap-4 text-xs tracking-[0.2em] font-bold uppercase mb-5">
+          <a 
+            href={productsUrl} 
+            class="flex items-center justify-center p-1 hover:text-hc-secondary transition-colors duration-200 group"
+            aria-label="Volver a productos">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="group-hover:-translate-x-1 transition-transform">
+              <path d="m15 18-6-6 6-6"/>
+            </svg>
+          </a>
+          <div class="flex items-center gap-3 text-gray-400">
+            <span class="w-1 h-1 bg-hc-banner rounded-full"></span>
+            <span class="text-hc-secondary">CAS: {key}</span>
+          </div>
+        </nav>
+        <h1 class="text-4xl lg:text-5xl font-bold text-hc-text/80 mb-8 leading-tight">
+          {name}
+        </h1>
+        <div class="relative pl-7">
+          <div class="absolute left-0 top-0 h-full w-1.5 bg-hc-primary rounded-full"></div>
+          <p class="text-lg text-gray-600 leading-relaxed">
+            {description}
+          </p>
+        </div>
+      </div>
+    </div> <div class="flex flex-col gap-8 mb-12 p-8 bg-white border border-gray-100 rounded-3xl shadow-sm">
+      <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-10">
+        <div class="flex flex-col items-center gap-3">
+          <p class="text-[10px] uppercase font-black text-gray-500 tracking-widest text-center">
+            {t('presentationsTitle')}
+          </p>
+          <div class="flex flex-col border border-gray-200 rounded-2xl overflow-hidden shadow-sm min-w-50">
+            <div class="divide-y divide-gray-100">
+              {presentations.map((item) => (
+                <div class="bg-white px-6 py-4 transition-colors hover:bg-gray-50 flex items-center justify-center">
+                  <span class="text-sm font-bold text-hc-primary text-center leading-none">
+                    {item.label}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+        <div class="flex flex-col items-center lg:items-start gap-3">
+          <p class="text-[10px] uppercase font-black text-gray-500 tracking-widest">
+            {t('pictogramsTitle')}
+          </p>
+          <div class="flex flex-wrap gap-4 p-4 bg-gray-50 rounded-2xl border border-dashed border-gray-200"> 
+            {pictograms.map((p) => (
+              pictogramMap[p] ? (
+                <div class="group relative">
+                  <img 
+                    src={pictogramMap[p]} 
+                    alt={`Pictograma ${p}`} 
+                    class="w-10 h-10 md:w-12 md:h-12 object-contain drop-shadow-sm transition-transform group-hover:scale-110" />
+                  <span class="absolute -top-9 left-1/2 -translate-x-1/2 bg-gray-800 text-white text-[10px] px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none capitalize whitespace-nowrap z-10">
+                    {p}
+                  </span>
+                </div>
+              ) : null
+            ))}
+            {pictograms.length === 0 && <span class="text-xs text-gray-400 italic">N/A</span>}
+          </div>
+        </div>
+        <div class="flex items-center justify-center">
+          <Button 
+            href="/documents/products/es-cat-Cinfoproducto.pdf"
+            class="inline-flex items-center gap-3 bg-hc-primary text-white px-10 py-5 rounded-2xl font-bold hover:bg-hc-secondary shadow-xl shadow-hc-primary/20 transition-all active:scale-95 text-base group">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 group-hover:animate-bounce" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+            </svg>
+            {t('safetyDataSheet')}
+          </Button>
+        </div>
+      </div>
+    </div>
+    <div class="border-b border-hc-primary/30 w-full pb-6 mb-12"></div>
+    <div class="product-container prose prose-hc max-w-none" set:html={content} />
+  </article>
+</Section>
+</MainLayout>
+
+<style is:global>
+  /* Solo aplicamos los bordes y colores de acento a tus clases originales */
+
+  /* Beneficios (Verde) */
+  .product-benefits.prose-hc {
+    border: 1px solid #17630a;
+    border-left: 5px solid #17630a;
+    padding: 20px;
+    margin-bottom: 24px;
+    border-radius: 4px;
+  }
+
+  /* Tabla (Mantenemos tu estructura pero con bordes definidos) */
+  .product-card.prose-hc table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 16px 0;
+    border: 1px solid #ccc; /* Ajusta este color al borde de tu tabla original */
+  }
+
+  .product-card th, .product-card td {
+    border: 1px solid #ccc;
+    padding: 10px;
+  }
+
+  /* Manejo y Primeros Auxilios (Amarillo) */
+  .product-warning.prose-hc {
+    border: 1px solid #d29922;
+    border-left: 5px solid #d29922;
+    padding: 20px;
+    margin-top: 24px;
+    border-radius: 4px;
+  }
+
+  /* Nota Importante (Rojo) */
+  .product-danger {
+    border: 1px solid #f85149;
+    border-left: 5px solid #f85149;
+    padding: 16px;
+    margin-top: 24px;
+    border-radius: 4px;
+  }
+
+  /* Espaciado para los h2 que ya tienes */
+  .prose-hc h2 {
+    margin-top: 0;
+    margin-bottom: 10px;
+  }
+</style>
+
+<script>
+  function initProductGallery() {
+    const container = document.getElementById('zoom-container');
+    const mainImg = document.getElementById('main-image') as HTMLImageElement;
+    if (container && mainImg) {
+      const handleMouseMove = (e: MouseEvent) => {
+        const { left, top, width, height } = container.getBoundingClientRect();
+        const x = ((e.clientX - left) / width) * 100;
+        const y = ((e.clientY - top) / height) * 100;
+        mainImg.style.transformOrigin = `${x}% ${y}%`;
+        mainImg.style.transform = "scale(2.5)";
+      };
+      const handleMouseLeave = () => {
+        mainImg.style.transform = "scale(1)";
+        mainImg.style.transformOrigin = "center";
+      };
+      container.addEventListener('mousemove', handleMouseMove);
+      container.addEventListener('mouseleave', handleMouseLeave);
+    }
+  }
+  initProductGallery();
+  document.addEventListener('astro:after-swap', initProductGallery);
+</script>

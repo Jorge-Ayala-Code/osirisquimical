@@ -1,0 +1,19 @@
+---
+import MainLayout from '../layouts/MainLayout.astro';
+import Hero from "../components/ui/Hero.astro";
+import Section from "../components/ui/Section.astro";
+import ContactComponent from "../components/home/Contact.astro";
+import { getLangHelpers } from '../i18n/utils';
+
+const { t, lang } = getLangHelpers(Astro.currentLocale);
+---
+
+<MainLayout>
+  <Hero
+    id="contact"
+    img='/../src/assets/images/heros/hero-contact.webp' 
+    title={t('contact_title')}/>
+  <Section id="contact" >
+    <ContactComponent title={t('index_contact_title')} />
+  </Section>
+</MainLayout> 

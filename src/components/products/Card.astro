@@ -1,0 +1,68 @@
+---
+import { getLangHelpers } from '../../i18n/utils';
+
+const { t, l } = getLangHelpers(Astro.currentLocale);
+
+interface Props {
+  name: string;
+  image: string;
+  key: string;
+  slug: string;
+  pictograms: string[]; 
+}
+
+const { 
+  name, 
+  image, 
+  key,
+  slug,
+  pictograms = [] 
+} = Astro.props;
+
+const pictogramMap: Record<string, string> = {
+  harmful: "/images/pictograms/ghs-harmful.svg",
+  flammable: "/images/pictograms/ghs-flammable.svg",
+  corrosive: "/images/pictograms/ghs-corrosive.svg",
+  gas: "/images/pictograms/ghs-gas.svg",
+  toxic: "/images/pictograms/ghs-toxic.svg",
+  environments: "/images/pictograms/ghs-environment.svg",
+  explosives: "/images/pictograms/ghs-explosive.svg",
+  health: "/images/pictograms/ghs-health.svg",
+  oxidizen: "/images/pictograms/ghs-oxidizer.svg"
+};
+---
+
+<a href={l(`/products/${slug}`)} class="group flex flex-col h-full bg-hc-desing border border-hc-banner rounded-lg overflow-hidden hover:shadow-xl transition-all duration-300">
+  <div class="relative h-64 p-6 overflow-hidden bg-hc-cards flex items-center justify-center shrink-0">
+    <img 
+      src={image} 
+      alt={name} 
+      class="w-full h-full object-contain max-h-full group-hover:scale-105 transition-transform duration-500"/>
+  </div>
+  <div class="p-5 flex flex-col grow">
+    {key && (
+      <span class="search-cas text-sm text-hc-secondary-text font-mono mb-1">
+        {t('card_code')} {key}
+      </span>
+    )}
+    <h3 class="search-title text-lg font-bold text-hc-text/80 group-hover:text-hc-primary transition-colors mb-2 line-clamp-2 min-h-14">
+      {name}
+    </h3>
+    <div class="flex gap-1.5 mb-4 min-h-16"> 
+      {pictograms.map((p) => (
+        pictogramMap[p] ? (
+          <img 
+            src={pictogramMap[p]} 
+            alt={`Pictograma ${p}`} 
+            class="w-6 h-6 object-contain"/>
+        ) : null
+      ))}
+    </div>
+    <div class="mt-auto pt-4 flex items-center text-sm font-semibold text-hc-primary border-t border-gray-100/50">
+      {t('card_description')}
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-2 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+      </svg>
+    </div>
+  </div> 
+</a>

@@ -1,63 +1,78 @@
 ---
 interface Props {
+  id?: string;
+  href?: string;
   targetId?: string;
   class?: string;
-  action?: 'menu' | 'scroll' | 'none';
+  action?: 'menu' | 'scroll' | 'lang-selector' | 'none';
   type?: 'button' | 'submit' | 'reset';
+  [key: string]: any;
 }
 
 const { 
+  id,
+  href,
   targetId, 
   class: className = "", 
   action = "none",
-  type = "button" 
+  type = "button",
+  ...rest
 } = Astro.props;
+
+const scrollClass = action === 'scroll' ? 'scroll-button' : '';
+const langClass = action === 'lang-selector' ? 'lang-button' : '';
 ---
 
-<button 
-  type={type}
-  data-target={targetId} 
-  data-action={action}
-  class:list={[className]}> 
-  <slot />
-</button>
+{
+  href ? (
+    <a 
+      id={id}
+      href={href} 
+      class:list={[className]} 
+      {...rest}>
+      <slot />
+    </a>
+  ) : (
+    <button 
+      id={id}
+      type={type}
+      data-target={targetId} 
+      data-action={action}
+      class:list={[className, scrollClass, langClass]}
+      {...rest}>
+      <slot />
+    </button>
+  )
+}
 
 <script>
-  document.addEventListener("DOMContentLoaded", () => {
-  const menuButtons = document.querySelectorAll('[data-target]');
-  menuButtons.forEach((button) => {
-    button.addEventListener('click', () => {
+  const initGlobalEvents = () => {
+    if ((window as any).buttonsInitialized) return; 
+    document.addEventListener('click', (e) => {
+      const button = (e.target as HTMLElement).closest('[data-action="menu"]');
+      if (!button) return;
       const targetId = button.getAttribute('data-target');
-      if (!targetId) return;
-      const mobileMenu = document.getElementById(targetId);
-      if (!mobileMenu) return;
-      mobileMenu.classList.toggle('opacity-100');
-      mobileMenu.classList.toggle('translate-y-0');
-      mobileMenu.classList.toggle('pointer-events-none');
-      const icons = button.querySelectorAll('.menu-icon');
-      icons.forEach(icon => {
-        icon.classList.toggle('hidden');
-      });
-    });
-  });
-});
-
-const initScroll = () => {
-  const scrollButtons = document.querySelectorAll<HTMLButtonElement>('.scroll-button');
-  scrollButtons.forEach((button) => {
-    button.addEventListener('click', () => {
-      const targetId = button.getAttribute('data-target');
-        if (!targetId) return;
-        const targetElement = document.getElementById(targetId);
-        if (targetElement) {
-          targetElement.scrollIntoView({ 
-            behavior: 'smooth',
-            block: 'start' 
-        });
+      const mobileMenu = targetId ? document.getElementById(targetId) : null;
+      if (mobileMenu) {
+        mobileMenu.classList.toggle('opacity-100');
+        mobileMenu.classList.toggle('translate-y-0');
+        mobileMenu.classList.toggle('pointer-events-none');
+        const icons = button.querySelectorAll('.menu-icon');
+        icons.forEach(icon => icon.classList.toggle('hidden'));
       }
     });
-  });
-};
-document.addEventListener('astro:page-load', initScroll);
-document.addEventListener('DOMContentLoaded', initScroll);
+    document.addEventListener('click', (e) => {
+       const button = (e.target as HTMLElement).closest('[data-action="scroll"]');
+       if (!button) return;
+       const targetId = button.getAttribute('data-target');
+       const targetElement = targetId ? document.getElementById(targetId) : null;
+       
+       if (targetElement) {
+         targetElement.scrollIntoView({ behavior: 'smooth' });
+       }
+    });
+    (window as any).buttonsInitialized = true;
+  };
+  initGlobalEvents();
+  document.addEventListener('astro:page-load', initGlobalEvents);
 </script>

@@ -1,57 +1,63 @@
 ---
 import sprite from "../../assets/icons/spritecss.svg?url";
-import Button from "../ui/Button.astro";
+import EmailSuccessfulMessage from "../ui/EmailSuccessfulMessage.astro";
+import Form from "../ui/Form.astro";
+import { getLangHelpers } from '../../i18n/utils';
+
+const { t, l, lang } = getLangHelpers(Astro.currentLocale);
 
 const location = `--x: 0%; --y: 100%;`;
+const maskBase = `mask-image: url(${sprite}); -webkit-mask-image: url(${sprite}); mask-size: 300% 300%; -webkit-mask-size: 300% 300%; mask-repeat: no-repeat; -webkit-mask-repeat: no-repeat;`;
 
-const maskBase = `mask-image: url(${sprite}); 
--webkit-mask-image: url(${sprite}); 
-mask-size: 300% 300%; 
--webkit-mask-size: 300% 300%; 
-mask-repeat: no-repeat; 
--webkit-mask-repeat: no-repeat;`;
+const contact = [
+  { name: "Nombre del cliente", maxlength: "72.1%", left: "58.1%" },
+  { name: "Correo de contacto", maxlength: "52.5%", left: "55.5%" },
+  { name: "Telefono de enlace", maxlength: "64.8%", left: "54.1%" },
+  { name: "Empresa de consulta", maxlength: "65.3%", left: "57.9%" },
+];
+
+const servvice = [
+  { name: "Estado de México", maxlength: "72.1%", left: "58.1%" },
+  { name: "San Luis Potosí", maxlength: "52.5%", left: "55.5%" },
+  { name: "Guanajuato", maxlength: "64.8%", left: "54.1%" },
+  { name: "Querétaro", maxlength: "65.3%", left: "57.9%" },
+];
+
+interface Props {
+  title?: string;
+}
+
+const { title } = Astro.props;
 ---
-<div class="max-w-2xl text-center mx-auto mb-10">
-  <h3 class="text-3xl font-bold tracking-tight text-hc-text sm:text-4xl">
-    Impulsemos juntos la eficiencia de tu industria
-  </h3>
-</div>
-<div class="flex flex-col gap-10 py-16 lg:flex-row lg:items-start">
-  <div class="w-full lg:w-1/2">
-    <form action="#" method="POST" class="grid grid-cols-1 gap-y-4">
-      <input type="text" name="name" id="name" required class="block w-full rounded-md border-0 py-3 px-3.5 text-hc-secondary-text shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-hc-secondary sm:text-sm" placeholder="Nombre completo" />
-      <input type="email" name="email" id="email" required class="block w-full rounded-md border-0 py-3 px-3.5 text-hc-secondary-text shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-hc-secondary sm:text-sm" placeholder="Correo electrónico" />
-      <input type="tel" name="phone" id="phone" required class="block w-full rounded-md border-0 py-3 px-3.5 text-hc-secondary-text shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-hc-secondary sm:text-sm" placeholder="Teléfono" />
-      <input type="text" name="company" id="company" required class="block w-full rounded-md border-0 py-3 px-3.5 text-hc-secondary-text shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-hc-secondary sm:text-sm" placeholder="Nombre de empresa" />
-      <textarea id="message" name="message" rows="4" required class="block w-full rounded-md border-0 py-3 px-3.5 text-hc-secondary-text shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-1 focus:ring-hc-secondary sm:text-sm" placeholder="Mensaje"></textarea>
-      <Button 
-        type="submit" 
-        class="w-full bg-hc-primary hover:bg-hc-secondary text-white py-3 rounded-md font-semibold hover:bg-opacity-90 transition-all"
-        aria-label="Boton de enviar formulario">
-        Enviar mensaje
-      </Button>
-    </form>
+
+<div class="group/section overflow-hidden">
+  <div class="max-w-2xl text-center mx-auto mb-10 ">
+    <h3 class="text-3xl font-bold tracking-tight text-hc-text sm:text-4xl">
+      {title}
+    </h3>
   </div>
-  <div class="flex flex-col items-center w-full lg:w-1/2 gap-4">
-    <div class="w-full h-81.25 lg:h-86 rounded-lg overflow-hidden shadow-lg border border-gray-200">
+  <div class="flex flex-col gap-10 lg:flex-row lg:items-start">
+    <div class="w-full lg:w-1/2">
+      <Form service="contact" />
+      <EmailSuccessfulMessage />
+    </div>
+    <div class="flex flex-col items-center w-full lg:w-1/2 gap-6">
+      <div class="w-full h-80 lg:h-86 rounded-2xl overflow-hidden shadow-xl border border-hc-banner group/map">
       <iframe 
-        title="Ubicación de Horus Chemical en Google Maps"
-        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d5471.832373466727!2d-99.26621478767218!3d19.583556005146004!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x85d21c6e59b95555%3A0x3b3dd159e90e243b!2sHorus%20Chemical%20S.A.%20de%20C.V!5e0!3m2!1ses-419!2smx!4v1771440170419!5m2!1ses-419!2smx" 
+        title="Ubicación" 
+        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3760.121508215573!2d-99.2729479247833!3d19.582112!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMTnvsCgzNCc1NS42Ik4gOTnCsDE2JzEzLjMiVw!5e0!3m2!1ses!2smx!4v1710000000000!5m2!1ses!2smx" 
         width="100%" 
-        height="100%"
+        height="100%" 
+        class="transition-all duration-900" 
         style="border:0;" 
         allowfullscreen="" 
-        loading="lazy" 
-        referrerpolicy="no-referrer-when-downgrade">
+        loading="lazy">
       </iframe>
-    </div>
-    <div class="flex items-center justify-center gap-2">
-      <div class="w-9 h-9 text-hc-primary shrink-0 bg-current inline-block" 
-        style={`${maskBase} mask-position: var(--x) var(--y); -webkit-mask-position: var(--x) var(--y); ${location}`}>
       </div>
-      <p class="max-w-xs text-sm md:text-base text-hc-text text-left">
-        Zacatecas 15, Adolfo Lopez Mateos, 52910 Cdad. López Mateos, Méx.
-      </p>
+      <div class="flex items-center gap-4 p-4 bg-hc-primary/5 rounded-xl w-full border border-hc-primary/10">
+        <div class="w-7 h-7 text-hc-primary shrink-0 bg-current" style={`${maskBase} mask-position: var(--x) var(--y); -webkit-mask-position: var(--x) var(--y); ${location}`}></div>
+        <p class="text-sm md:text-base text-hc-text font-medium">Tamaulipas 11, Adolfo Lopez Mateos, 00000 Cdad. López Mateos, Méx.</p>
+      </div>
     </div>
   </div>
 </div>

@@ -1,0 +1,86 @@
+---
+import Button from "../ui/Button.astro";
+import { getLangHelpers } from '../../i18n/utils';
+
+const { t, l, lang } = getLangHelpers(Astro.currentLocale);
+
+const logos = [
+  { src: '/src/assets/images/companies/Logo.jpg', href: l('/404'), alt: 'company logo' },
+  { src: '/src/assets/images/companies/Logo.jpg', href: l('/404'), alt: 'company logo' },
+  { src: '/src/assets/images/companies/Logo.jpg', href: l('/404'), alt: 'company logo' },
+  { src: '/src/assets/images/companies/Logo.jpg', href: l('/404'), alt: 'company logo' },
+  { src: '/src/assets/images/companies/Logo.jpg', href: l('/404'), alt: 'company logo' },
+  { src: '/src/assets/images/companies/Logo.jpg', href: l('/404'), alt: 'company logo' },
+  { src: '/src/assets/images/companies/Logo.jpg', href: l('/404'), alt: 'company logo' },
+  { src: '/src/assets/images/companies/Logo.jpg', href: l('/404'), alt: 'company logo' },
+  { src: '/src/assets/images/companies/Logo.jpg', href: l('/404'), alt: 'company logo' },
+  { src: '/src/assets/images/companies/Logo.jpg', href: l('/404'), alt: 'company logo' }
+];
+---
+
+<div class="max-w-7xl mx-auto px-4 py-20">
+  <div class="mb-12">
+    <h2 class="text-4xl font-bold text-hc-text leading-tight text-center md:text-left">
+      {t('clients_title')} <span class="text-hc-primary">{t('name')}</span>
+    </h2>
+  </div>
+  <div class="relative group">
+    <Button 
+      id="prev-logo" 
+      class="hidden md:flex absolute -left-6 top-1/2 -translate-y-1/2 z-20 p-4 bg-hc-desing border border-hc-desing rounded-full shadow-xl text-hc-secondary-text hover:text-hc-primary hover:border-hc-primary"
+      aria-label="Previous">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+      </svg>
+    </Button>
+    <Button 
+      id="next-logo" 
+      class="hidden md:flex absolute -right-6 top-1/2 -translate-y-1/2 z-20 p-4 bg-hc-desing border border-hc-desing rounded-full shadow-xl text-hc-secondary-text hover:text-hc-primary hover:border-hc-primary"
+      aria-label="Next">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+      </svg>
+    </Button>
+    <div 
+      id="logo-track" 
+      class="flex gap-6 overflow-x-auto md:overflow-hidden scroll-smooth snap-x snap-mandatory [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] py-4 px-2">
+      {logos.map((logo) => (
+        <div class="flex-none w-[75%] sm:w-[45%] md:w-[23%] snap-start">
+          <a class="h-40 rounded-3xl p-10 flex items-center justify-center transition-all duration-500 grayscale-0 md:grayscale md:hover:grayscale-0 md:hover:bg-hc-desing md:hover:shadow-xl md:hover:-translate-y-1" target="_blank" href={logo.href}>
+            <img src={logo.src} alt={logo.alt} class="max-h-full max-w-full object-contain"/>
+          </a>
+        </div>
+      ))}
+    </div>
+  </div>
+</div>
+
+<script>
+  function initLogosCarousel() {
+    const track = document.getElementById('logo-track');
+    const prevBtn = document.getElementById('prev-logo');
+    const nextBtn = document.getElementById('next-logo');
+    if (track && prevBtn && nextBtn) {
+      const move = (direction: 'next' | 'prev') => {
+        const items = Array.from(track.children) as HTMLElement[];
+        if (items.length === 0) return;
+        const itemWidth = items[0].offsetWidth;
+        const gap = parseInt(window.getComputedStyle(track).gap) || 0;
+        const step = itemWidth + gap;
+        const currentIndex = Math.round(track.scrollLeft / step);
+        let nextIndex = direction === 'next' ? currentIndex + 1 : currentIndex - 1;
+        nextIndex = Math.max(0, Math.min(nextIndex, items.length - 1));
+        track.scrollTo({
+          left: nextIndex * step,
+          behavior: 'smooth'
+        });
+      };
+      nextBtn.onclick = () => move('next');
+      prevBtn.onclick = () => move('prev');
+    }
+  }
+  initLogosCarousel();
+  document.addEventListener('astro:after-swap', () => {
+    initLogosCarousel();
+  });
+</script>

@@ -1,17 +1,32 @@
 ---
 import MainLayout from '../layouts/MainLayout.astro';
-import Hero from "../components/home/Hero.astro";
+import Hero from "../components/ui/Hero.astro";
 import Welcome from "../components/home/Welcome.astro";
 import Contact from "../components/home/Contact.astro";
 import Section from "../components/ui/Section.astro";
+import Certificated from "../components/about/Certificated.astro";
+import Clients from "../components/home/Clients.astro";
+import { getLangHelpers } from '../i18n/utils';
+
+const { t } = getLangHelpers(Astro.currentLocale);
 ---
 
 <MainLayout>
-  <Hero />
+  <Hero 
+    id="welcome"
+    img='/../src/assets/images/heros/hero2.webp' 
+    title={t('slogan')}
+    text={t('seeMore')} />
   <Section id="welcome">
     <Welcome />
   </Section>
-  <Section id="Contact">
-    <Contact />
+    <Section id="certificated">
+    <Certificated />
+  </Section>
+  <Section id="clients">
+    <Clients>
+  </Section>
+  <Section id="contact">
+    <Contact title={t('index_contact_title')} />
   </Section>
 </MainLayout> 

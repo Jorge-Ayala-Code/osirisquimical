@@ -1,0 +1,60 @@
+---
+import { getLangHelpers } from '../../i18n/utils';
+
+const { t, lang } = getLangHelpers(Astro.currentLocale);
+
+const categories = [
+  { id: "oils", name: t('product_category_filter2') },
+  { id: "degreasers", name: t('product_category_filter3') },
+  { id: "phosphates", name: t('product_category_filter4') },
+  { id: "water", name: t('product_category_filter5') },
+  { id: "maintenance", name: t('product_category_filter6') },
+  { id: "others", name: t('product_category_filter7') }
+];
+---
+<div class="w-full md:w-auto">
+  <div class="mb-10 flex justify-start px-0">
+    <div class="relative w-full max-w-xs text-left">
+      <label for="category-filter" class="block mb-2 text-sm font-semibold text-hc-text">{t('product_filter_text')}</label>
+      <select 
+        id="category-filter" 
+        class="w-full px-4 py-2.5 rounded-lg border border-hc-background bg-hc-desing text-hc-text font-medium focus:ring-2 focus:ring-hc-secondary focus:border-hc-secondary outline-none transition-all appearance-none cursor-pointer shadow-sm hover:shadow-md">
+        {categories.map((cat) => (
+          <option value={cat.id}>{cat.name}</option>
+        ))}
+      </select>
+      <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 pt-7 text-hc-text">
+        <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+        </svg>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const filterSelect = document.getElementById('category-filter') as HTMLSelectElement;
+const cards = document.querySelectorAll('.product-card-container');
+if (filterSelect) {
+  filterSelect.addEventListener('change', (e: Event) => {
+    const target = e.target as HTMLSelectElement;
+    const category = target.value;
+    cards.forEach(card => {
+      const element = card as HTMLElement;
+      const cardCategory = element.getAttribute('data-category');
+      if (category === "Todos" || cardCategory === category) {
+        element.classList.remove('hidden');
+        element.animate([
+          { opacity: 0, transform: 'scale(0.95)' },
+          { opacity: 1, transform: 'scale(1)' }
+        ], { duration: 250, easing: 'ease-out' });
+      } else {
+        element.classList.add('hidden');
+      }
+    });
+    window.dispatchEvent(new CustomEvent('category-change', {
+      detail: { category: category }
+    }));
+  });
+}
+</script>

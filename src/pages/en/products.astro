@@ -1,0 +1,170 @@
+---
+import { getCollection } from 'astro:content';
+import MainLayout from '../../layouts/MainLayout.astro';
+import Hero from "../../components/ui/Hero.astro";
+import Section from "../../components/ui/Section.astro";
+import ProductCard from '../../components/products/Card.astro';
+import Filter from '../../components/products/Filter.astro';
+import Search from "../../components/products/Search.astro"
+import NotFoundProduct from '../../components/products/NotFoundProduct.astro';
+import { getLangHelpers } from '../../i18n/utils';
+
+const { t, lang } = getLangHelpers(Astro.currentLocale);
+const allProductsFromCollection = await getCollection('products');
+const filteredProducts = allProductsFromCollection.filter(product => {
+  return product.data.lang === lang;
+});
+const categories = [...new Set(filteredProducts.map(p => p.data.category))];
+---
+
+<MainLayout>
+  <Hero 
+    id="products"
+    img='/../src/assets/images/heros/hero-products.jpg' 
+    title={t('products_title')}
+    text={t('seeMore')}/>
+  <Section id="products" >
+    <h2 class="text-3xl font-bold text-hc-text">{t('products_subtitle')}</h2>
+    <div class="flex flex-col md:flex-row py-6 items-start gap-4 w-full">
+      <Filter categories={categories} />
+      <Search />
+    </div>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
+      {filteredProducts.map(product => (
+        <div class="product-card-container" data-category={product.data.category}>
+          <ProductCard 
+            name={product.data.name!} 
+            key={product.data.key!}
+            image={product.data.image!}
+            slug={product.id} 
+            pictograms={product.data.pictograms}             
+          />
+        </div>
+      ))}
+    </div>
+    <div id="pagination-container" class="flex justify-center items-center gap-2 mt-12 mb-10"></div>
+    <NotFoundProduct />
+  </Section>
+</MainLayout>
+
+
+<script is:inline>
+  function initializeAll() {
+    const searchInput = document.getElementById('product-search');
+    const filterSelect = document.getElementById('category-filter');
+    const cards = document.querySelectorAll('.product-card-container');
+    const noResults = document.getElementById('no-results');
+    const termDisplay = document.getElementById('search-term-display');
+    const paginationContainer = document.getElementById('pagination-container');
+    if (!filterSelect || !searchInput) return;
+    const PRODUCTS_PER_PAGE = 9;
+    let currentPage = 1;
+    const urlParams = new URLSearchParams(window.location.search);
+    const categoryFromUrl = urlParams.get('category');
+    if (categoryFromUrl) {
+      for (let i = 0; i < filterSelect.options.length; i++) {
+        if (filterSelect.options[i].value === categoryFromUrl) {
+          filterSelect.selectedIndex = i;
+          break;
+        }
+      }
+    }
+    function runFilters() {
+      const query = searchInput.value.toLowerCase().trim();
+      const selectedCat = filterSelect.value;
+      const matches = [];
+      cards.forEach(card => {
+        const cardCategory = card.getAttribute('data-category');
+        const title = card.querySelector('.search-title')?.textContent?.toLowerCase() || "";
+        const cas = card.querySelector('.search-cas')?.textContent?.toLowerCase() || "";
+        const matchCat = (selectedCat === "all" || selectedCat === "Todos" || cardCategory === selectedCat);
+        const matchSearch = (title.includes(query) || cas.includes(query));
+        if (matchCat && matchSearch) {
+          card.classList.remove('hidden');
+          matches.push(card);
+        } else {
+          card.classList.add('hidden');
+          card.style.display = 'none';
+        }
+      });
+      const totalPages = Math.ceil(matches.length / PRODUCTS_PER_PAGE);
+      matches.forEach((card, index) => {
+        const start = (currentPage - 1) * PRODUCTS_PER_PAGE;
+        const end = start + PRODUCTS_PER_PAGE;
+        if (index >= start && index < end) {
+          card.style.display = 'block'; 
+        } else {
+          card.style.display = 'none';
+        }
+      });
+      renderPaginationButtons(totalPages);
+      if (query.length > 0 && matches.length === 0) {
+        noResults?.classList.remove('hidden');
+        if (termDisplay) termDisplay.textContent = `"${searchInput.value}"`;
+      } else {
+        noResults?.classList.add('hidden');
+      }
+    }
+    function renderPaginationButtons(totalPages) {
+      if (!paginationContainer) return;
+      paginationContainer.innerHTML = '';
+      if (totalPages <= 1) return;s
+      if (currentPage > 1) {
+        const prevBtn = document.createElement('button');
+        prevBtn.innerHTML = '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>';
+        prevBtn.className = "w-10 h-10 flex items-center justify-center rounded-lg border border-white/10 text-hc-text hover:border-hc-secondary/50 transition-all mr-1";
+        prevBtn.onclick = () => {
+          currentPage--;
+          runFilters();
+          scrollToProducts();
+        };
+        paginationContainer.appendChild(prevBtn);
+      }
+      for (let i = 1; i <= totalPages; i++) {
+        const btn = document.createElement('button');
+        btn.textContent = i;
+        btn.className = `w-10 h-10 flex items-center justify-center rounded-lg border transition-all ${
+          currentPage === i 
+          ? "bg-hc-secondary text-white border-hc-secondary font-bold" 
+          : "border-white/10 text-hc-text hover:border-hc-secondary/50"
+        }`;
+        btn.onclick = () => {
+          currentPage = i;
+          runFilters();
+          scrollToProducts();
+        };
+        paginationContainer.appendChild(btn);
+      }
+      if (currentPage < totalPages) {
+        const nextBtn = document.createElement('button');
+        nextBtn.innerHTML = '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>';
+        nextBtn.className = "w-10 h-10 flex items-center justify-center rounded-lg border border-white/10 text-hc-text hover:border-hc-secondary/50 transition-all ml-1";
+        nextBtn.onclick = () => {
+          currentPage++;
+          runFilters();
+          scrollToProducts();
+        };
+        paginationContainer.appendChild(nextBtn);
+      }
+    }
+    function scrollToProducts() {
+      const seccion = document.getElementById('products');
+      if (seccion) {
+        window.scrollTo({ top: seccion.offsetTop - 50, behavior: 'smooth' });
+      }
+    }
+    searchInput.addEventListener('input', () => { currentPage = 1; runFilters(); });
+    filterSelect.addEventListener('change', () => { currentPage = 1; runFilters(); });
+    runFilters();
+    if (categoryFromUrl) {
+      const seccion = document.getElementById('products');
+      if (seccion) {
+        setTimeout(() => {
+          window.scrollTo({ top: seccion.offsetTop - 1, behavior: 'auto' });
+        }, 100);
+      }
+    }
+  }
+  initializeAll();
+  document.addEventListener('astro:page-load', initializeAll);
+</script>

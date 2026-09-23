@@ -1,0 +1,62 @@
+---
+import Button from "../ui/Button.astro";
+
+const { service = "contact" } = Astro.props;
+const isTech = service === "tech";
+const emailContacto = "22102003@utfv.edu.mx"; 
+const emailSoporte = "22102003@utfv.edu.mx"; 
+const actionUrl = `https://formsubmit.co/ajax/${isTech ? emailSoporte : emailContacto}`;
+const subject = isTech ? "Solicitud de Asesoría Técnica" : "Nueva Consulta de Cliente";
+import { getLangHelpers } from '../../i18n/utils';
+
+const { t, lang } = getLangHelpers(Astro.currentLocale);
+---
+
+<form id="form" action={actionUrl} method="POST" class="grid grid-cols-1 gap-y-4">
+  <input type="hidden" name="_subject" value={subject}>
+  <input type="hidden" name="_captcha" value="false">
+  <input type="hidden" name="_template" value="table">
+
+  {isTech ? (
+    <>
+      <select name="Tipo de Asesoría" required class="block w-full bg-hc-desing rounded-md border-0 py-3 px-3.5 shadow-sm ring-1 ring-hc-banner focus:ring-2 outline-none"  >
+        <option value="" disabled selected>{t('service_form_select_default')}</option> 
+        <option value="Diagnóstico en Sitio">{t('service_form_select_opt1')}</option>
+        <option value="Optimización de Costos">{t('service_form_select_opt2')}</option>
+        <option value="Capacitación SGA">{t('service_form_select_opt3')}</option>
+      </select>
+      <input type="text" name="Sector Industrial" required placeholder={t('service_form_input_sector')} 
+        class="block w-full bg-hc-desing rounded-md border-0 py-3 px-3.5 shadow-sm ring-1 ring-hc-banner focus:ring-2 outline-none"
+        maxlength="50"/>
+      <input type="text" name="Producto o Proceso" required placeholder={t('service_form_input_process')} 
+        class="block w-full bg-hc-desing rounded-md border-0 py-3 px-3.5 shadow-sm ring-1 ring-hc-banner focus:ring-2 outline-none"
+        maxlength="30"/>
+      <input type="text" name="Ubicación de Planta" required placeholder={t('service_form_input_location')} 
+        class="block w-full bg-hc-desing rounded-md border-0 py-3 px-3.5 shadow-sm ring-1 ring-hc-banner focus:ring-2 outline-none"
+        maxlength="100"/>
+    </>
+  ) : (
+    <>
+      <input type="text" name="Nombre del cliente" required placeholder={t('service_form_input_name')} 
+        class="block w-full bg-hc-desing rounded-md border-0 py-3 px-3.5 shadow-sm ring-1 ring-hc-banner focus:ring-2 outline-none"
+        maxlength="50"/>
+      <input type="email" name="Correo de contacto" required placeholder={t('service_form_input_email')} 
+        class="block w-full bg-hc-desing rounded-md border-0 py-3 px-3.5 shadow-sm ring-1 ring-hc-banner focus:ring-2 outline-none"
+        maxlength="60" autocomplete="email"/>
+      <input type="tel" name="Telefono de enlace" required placeholder={t('service_form_input_phone')} 
+        class="block w-full bg-hc-desing rounded-md border-0 py-3 px-3.5 shadow-sm ring-1 ring-hc-banner focus:ring-2 outline-none"
+        maxlength="10" oninput="this.value = this.value.replace(/[^0-9]/g, '');"/>
+      <input type="text" name="Empresa de consulta" required placeholder={t('service_form_input_company')} 
+        class="block w-full bg-hc-desing rounded-md border-0 py-3 px-3.5 shadow-sm ring-1 ring-hc-banner focus:ring-2 outline-none"
+        maxlength="60"/>
+    </>
+  )}
+  <textarea name="Mensaje" rows="4" required placeholder={t('service_form_input_message')} 
+    class="block w-full bg-hc-desing rounded-md border-0 py-3 px-3.5 shadow-sm ring-1 ring-hc-banner focus:ring-2 outline-none"></textarea>
+  <Button
+    id="btn-send"
+    type="submit"
+    class="w-full bg-hc-primary hover:bg-hc-secondary text-hc-desing py-4 rounded-md font-semibold shadow-md active:scale-95 transition-all duration-200">
+    {t('text_button_form')}
+  </Button>
+</form>

@@ -1,5 +1,7 @@
 ---
 import sprite from "../../assets/icons/spritecss.svg?url";
+import { getLangHelpers } from '../../i18n/utils';
+const { t, l, lang } = getLangHelpers(Astro.currentLocale);
 
 const facebook = `--x: 0%; --y: 0%;`;
 const linkedin = `--x: 100%; --y: 0%;`;
@@ -14,46 +16,46 @@ const maskBase =
 -webkit-mask-repeat: no-repeat;`;
 
 const nav = [
-  {href: "#", label: "Nosotros"},
-  {href: "#", label: "Productos"},
-  {href: "#", label: "Servicios"},
-  {href: "#", label: "Contacto"},
-  {href: "#", label: "Aviso de privacidad"},
+  { href: l("/about"), label: t("nav_about") },
+  { href: l("/products"), label: t("nav_products") },
+  { href: l("/services"), label: t("nav_services") },
+  { href: l("/contact"), label: t("nav_contact") },
+  { href: l("/privacy_policy"), label: t("nav_privacy") },
 ];
 
+
 const contact = [
-  { Icon: location , text: "Zacatecas 15, Adolfo Lopez Mateos, 52910 Cdad. López Mateos, Méx."},
-  { Icon: phone , text:"(55)-58-25-96-52" },
-  { Icon: mail , text: "Ventas@horuschemical.com.mx"}
+  { Icon: location , text: "Tamaulipas 11, Adolfo Lopez Mateos, 00000 Cdad. López Mateos, Méx."},
+  { Icon: phone , text:"55-55-55-55-55" },
+  { Icon: mail , text: "Ventas@osirisquimical.com.mx"}
 ];
 
 const socialMedia = [
-  { Icon: facebook , href: "https://www.facebook.com/p/Horus-Chemical-SA-de-CV-100066616406227/?locale=es_LA"},
-  { Icon: linkedin , href: "https://www.linkedin.com/in/horus-chemical-30bb232b9/" }
+  { Icon: facebook , href: "https://www.facebook.com"},
+  { Icon: linkedin , href: "https://www.linkedin.com" }
 ];
 ---
-
-<footer class="bg-hc-primary text-white py-10 mt-auto">
+<footer class="bg-hc-primary text-hc-desing py-10 mt-auto overflow-hidden">
   <div class="mx-auto max-w-225 px-4">
     <div class="grid grid-cols-1 md:grid-cols-4 gap-10">
       <div class="flex flex-col items-center text-center">
-        <img src="/src/assets/images/Logo-Horus.svg" alt="Horus_Chemical_Logo" class="h-24 w-auto mb-3"/>
-        <i>Innovación Química para un Futuro Sostenible</i>
+        <img src="/src/assets/images/logos/Logo-Osiris.png" alt="Osiris Quimical Logo" class="h-24 w-auto mb-3"/>
+        <i>{t("slogan")}</i>
       </div>
       <div class="flex flex-col mb-4 items-center text-center tracking-wider mt-4">
         <ul class="flex flex-col space-y-2"> 
           {nav.map((item) => (
-            <li><a href={item.href} class="hover:text-hc-secondary transition-colors">{item.label}</a></li>
+            <li><a href={item.href} class="hover:text-hc-background/60 transition-colors">{item.label}</a></li>
           ))}
         </ul>
       </div>
       <div class="flex flex-col items-center text-center">
-        <h4 class="font-bold mb-4 text-sm uppercase tracking-wider">Contactanos</h4>
+        <h4 class="font-bold mb-4 text-sm uppercase tracking-wider">{t("contact")}</h4>
         <div class="space-y-4">
           {contact.map(({ Icon, text }) => (
             <div class="flex flex-col items-center gap-1">
               <div 
-                class="w-5 h-5 bg-white inline-block" 
+                class="w-5 h-5 bg-hc-desing inline-block" 
                 style={`${maskBase} mask-position: var(--x) var(--y); -webkit-mask-position: var(--x) var(--y); ${Icon}`}>
               </div>
               <span>{text}</span>
@@ -62,13 +64,13 @@ const socialMedia = [
         </div>
       </div>
       <div class="flex flex-col items-center text-center">
-        <h4 class="font-bold mb-4 text-sm uppercase tracking-wider">Síguenos</h4>
+        <h4 class="font-bold mb-4 text-sm uppercase tracking-wider">{t("follow")}</h4>
         <ul class="flex flex-row space-x-2">
           {socialMedia.map(({ Icon, href }) => (
             <li>
               <a href={href} target="_blank" rel="noopener noreferrer" class="hover:scale-110 inline-block transition-transform">
                 <div 
-                  class="w-10 h-10 bg-white inline-block" 
+                  class="w-10 h-10 bg-hc-desing inline-block" 
                   style={`${maskBase} mask-position: var(--x) var(--y); -webkit-mask-position: var(--x) var(--y); ${Icon}`}
                 ></div>
               </a>
@@ -77,8 +79,8 @@ const socialMedia = [
         </ul>
       </div> 
     </div>
-    <div class="text-center mt-12 border-t border-white/10 pt-6 text-sm opacity-50">
-      <p>&copy; {new Date().getFullYear()} Horus Chemical. Todos los derechos reservados.</p> 
+    <div class="text-center mt-12 border-t border-hc-desing/10 pt-6 text-sm">
+      <p>&copy; {new Date().getFullYear()} {t("copyright")}</p> 
     </div>
   </div>
 </footer>

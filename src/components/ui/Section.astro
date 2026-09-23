@@ -1,5 +1,11 @@
 ---
 interface Props {
+  isDetail?: boolean; 
+}
+const { isDetail = false } = Astro.props;
+const paddingClass = isDetail ? "pt-0 pb-16" : "py-16";
+
+interface Props {
   id?: string;
   class?: string;
 }
@@ -10,7 +16,7 @@ const {
 } = Astro.props;
 ---
 <section id={id} class:list={["bg-hc-background min-h-screen flex items-center py-12", className]}>
-  <div class="relative mx-auto max-w-225 py-16 px-4 w-full">
+  <div id="div-section" class={`relative mx-auto max-w-225 px-4 w-full ${paddingClass}`}>
     <slot />
   </div>
 </section>

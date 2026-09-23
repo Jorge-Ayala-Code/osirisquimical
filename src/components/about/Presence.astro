@@ -1,0 +1,119 @@
+---
+import Map from "../../assets/images/map/mx.svg"
+import { getLangHelpers } from '../../i18n/utils';
+
+const { t, lang } = getLangHelpers(Astro.currentLocale);
+
+const locations = [
+  { name: "Estado de México", top: "72.1%", left: "58.1%" },
+  { name: "San Luis Potosí", top: "52.5%", left: "55.5%" },
+  { name: "Guanajuato", top: "64.8%", left: "54.1%" },
+  { name: "Querétaro", top: "65.3%", left: "57.9%" },
+  { name: "CDMX", top: "73.1%", left: "59.8%" }
+];
+---
+
+<div class="max-w-2xl text-center mx-auto mb-10">
+  <h3 class="text-3xl font-bold tracking-tight text-hc-text sm:text-4xl">
+    {t('presence_title')}
+  </h3>
+  <p class="mt-2 text-gray-600">
+    {t('presence_subtitle')}
+  </p>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-10 items-center" id="map-section">
+  <div class="lg:col-span-2 relative w-full h-auto">
+    <Map class="w-full h-auto"/>
+    {locations.map((loc, index) => (
+      <div 
+        class="map-pin absolute w-8 h-8 hover:scale-110 transition-transform"
+        style={{
+          top: loc.top, 
+          left: loc.left, 
+          animationDelay: `${index * 0.15}s`,
+          transform: "translate(-50%, -100%)"
+        }}
+        title={loc.name}>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="w-full h-full drop-shadow-md">
+          <path fill="#ef4444" d="M11.54 22.351l.07.04.028.016a.76.76 0 00.723 0l.028-.015.071-.041a16.975 16.975 0 001.144-.742 19.58 19.58 0 002.683-2.282c1.944-1.99 3.963-4.98 3.963-8.827a8.25 8.25 0 00-16.5 0c0 3.846 2.02 6.837 3.963 8.827a19.58 19.58 0 002.682 2.282 16.975 16.975 0 001.145.742z" />
+          <path fill="#000000" d="M12 13.5a3 3 0 100-6 3 3 0 000 6z" />
+        </svg>
+      </div>
+    ))}
+  </div>
+  <div class="flex flex-col gap-3">
+    <h4 class="text-xl font-semibold mb-4 text-hc-text border-b border-hc-primary pb-2">{t('presence_locations')}</h4>
+    <div class="grid grid-cols-2 lg:grid-cols-1 gap-2">
+      {locations.map((loc) => (
+      <div class="flex items-center gap-2 text-hc-secondary-text hover:text-hc-secondary transition-colors cursor-default py-1">
+        <span class="w-2 h-2 bg-hc-primary rounded-full"></span>
+        <span class="text-sm font-medium">{loc.name}</span>
+      </div>
+      ))}
+    </div>
+  </div>
+</div>
+
+<script>
+  const initMapAnimation = () => {
+    const target = document.querySelector('#map-section');
+    const pins = document.querySelectorAll<HTMLElement>('.map-pin');
+    const listItems = document.querySelectorAll<HTMLElement>('.location-list-item');
+    if (!target) return;
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.3 });
+    observer.observe(target);
+    function highlight(id: string) {
+      const pin = document.querySelector(`#pin-${id}`);
+      const text = document.querySelector(`#list-item-${id} .location-item-text`);
+      pin?.classList.add('is-highlighted');
+      text?.classList.add('is-text-highlighted');
+    }
+    function unHighlight(id: string) {
+      const pin = document.querySelector(`#pin-${id}`);
+      const text = document.querySelector(`#list-item-${id} .location-item-text`);
+      pin?.classList.remove('is-highlighted');
+      text?.classList.remove('is-text-highlighted');
+    }
+    pins.forEach(pin => {
+      const id = pin.getAttribute('data-location-id');
+      if (id) {
+        pin.addEventListener('mouseenter', () => highlight(id));
+        pin.addEventListener('mouseleave', () => unHighlight(id));
+      }
+    });
+    listItems.forEach(item => {
+      const id = item.getAttribute('data-location-id');
+      if (id) {
+        item.addEventListener('mouseenter', () => highlight(id));
+        item.addEventListener('mouseleave', () => unHighlight(id));
+      }
+    });
+  };
+  document.addEventListener('astro:page-load', initMapAnimation);
+</script>
+
+<style>
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translate(-50%, -50%);
+    }
+    to {
+      opacity: 1;
+      transform: translate(-50%, -100%);
+    }
+  }
+  .map-pin {
+    opacity: 0;
+  }
+  .is-visible .map-pin {
+    animation: fadeInUp 0.6s ease-out forwards;
+  }
+</style>

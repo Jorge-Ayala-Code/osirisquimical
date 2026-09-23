@@ -1,0 +1,63 @@
+---
+import { getLangHelpers } from '../../i18n/utils';
+
+const {t} = getLangHelpers(Astro.currentLocale);
+---
+
+<div id="result" class="hidden mt-4 p-8 text-center rounded-md border border-hc-primary/20 bg-green-50 max-w-2xl mx-auto">
+  <h3 class="text-2xl font-bold text-hc-primary">{t('form_message') }</h3>
+  <p class="text-gray-600 mt-2">{ t('second_form_message') }</p>
+</div>
+
+<script is:inline>
+  const setupForm = () => {
+    const form = document.getElementById('form');
+    const result = document.getElementById('result');
+    const btnEnviar = document.getElementById('btn-send');
+
+    if (!form) return;
+
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      const formData = new FormData(form);
+      const object = Object.fromEntries(formData);
+      const json = JSON.stringify(object);
+
+      btnEnviar.innerText = "Enviando...";
+      btnEnviar.disabled = true;
+
+      // USAMOS form.action PARA QUE FUNCIONE CON LOS 2 CORREOS
+      fetch(form.action, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: json
+      })
+      .then(async (response) => {
+        if (response.ok) {
+          form.style.display = 'none'; // Usamos style por seguridad
+          result.classList.remove('hidden');
+        } else {
+          const data = await response.json();
+          alert("Error: " + (data.message || "No se pudo enviar"));
+          btnEnviar.innerText = "Enviar mensaje";
+          btnEnviar.disabled = false;
+        }
+      })
+      .catch(error => {
+        console.error("Error:", error);
+        alert("Hubo un error de conexión.");
+        btnEnviar.innerText = "Enviar mensaje";
+        btnEnviar.disabled = false;
+      });
+    });
+  };
+
+  // Se ejecuta al cargar
+  document.addEventListener('DOMContentLoaded', setupForm);
+  // Se ejecuta si usas ViewTransitions de Astro
+  document.addEventListener('astro:after-swap', setupForm);
+</script>

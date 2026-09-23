@@ -1,0 +1,66 @@
+---
+import { getLangHelpers } from '../../i18n/utils';
+
+const { t, lang } = getLangHelpers(Astro.currentLocale);
+
+const values = [
+  {Value: t('MisionVisionValues_Values1')},
+  {Value: t('MisionVisionValues_Values2')},
+  {Value: t('MisionVisionValues_Values3')},
+  {Value: t('MisionVisionValues_Values4')},
+  {Value: t('MisionVisionValues_Values5')},
+  {Value: t('MisionVisionValues_Values6')}
+];
+---
+
+<div class="max-w-7xl mx-auto">
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+    <div class="flex flex-col gap-6 p-8 bg-hc-banner rounded-2xl  ">
+      <div class="flex items-center gap-4">
+        <div class="w-12 h-12 rounded-full bg-hc-primary/10 flex items-center justify-center border border-hc-primary/20 shrink-0">
+          <svg class="w-6 h-6 text-hc-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+          </svg>
+        </div>
+        <h3 class="text-2xl font-bold tracking-tight text-hc-text uppercase text-nowrap">{t('MisionVisionValues_MisionTitle')}</h3>
+        <div class="border border-hc-primary w-full"></div>
+      </div>
+      <p class="text-lg leading-relaxed text-hc-secondary-text">
+        {t('MisionVisionValues_MisionTextP1')}<strong class="text-hc-text font-semibold">{t('MisionVisionValues_MisionHighlightedText')}</strong> {t('MisionVisionValues_MisionTextP2')}
+      </p>
+    </div>
+    <div class="flex flex-col gap-6 p-8 bg-hc-banner rounded-2xl ">
+      <div class="flex items-center gap-4">
+        <div class="w-12 h-12 rounded-full bg-hc-primary/10 flex items-center justify-center border border-hc-primary/20 shrink-0">
+          <svg class="w-6 h-6 text-hc-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+          </svg>
+        </div>
+        <h3 class="text-2xl font-bold tracking-tight text-hc-text uppercase text-nowrap">{t('MisionVisionValues_VisionTitle')}</h3>
+        <div class="border border-hc-primary w-full"></div>
+      </div>
+      <p class="text-lg leading-relaxed text-hc-secondary-text">
+        {t('MisionVisionValues_VisionTextP1')}<strong class="text-hc-text font-semibold">{t('MisionVisionValues_VisionHighlightedText')}</strong> {t('MisionVisionValues_VisionTextP2')}
+      </p>
+    </div>
+  </div>
+  <div class="p-8 md:p-10 bg-hc-banner rounded-2">
+    <div class="flex items-center gap-4 mb-10 pb-6">
+      <div class="w-10 h-10 rounded-full bg-hc-primary/10 flex items-center justify-center border border-hc-primary/20 shrink-0">
+        <svg class="w-5 h-5 text-hc-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+      </div>
+      <h3 class="text-xl font-bold text-hc-text items-center uppercase tracking-widest text-nowrap">{t('MisionVisionValues_ValuesTitle')}</h3>
+      <div class="border border-hc-primary w-full"></div>
+    </div>
+    <div class="grid grid-cols-2 md:grid-cols-3 gap-y-4 gap-x-8 ">
+      {values.map((item) => (
+        <div class="flex items-center gap-2 font-medium">
+          <span class="text-xl leading-none">•</span> {item.Value}
+        </div>
+        ))}
+    </div>
+  </div>
+</div>

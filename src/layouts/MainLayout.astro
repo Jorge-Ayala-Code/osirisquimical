@@ -1,8 +1,10 @@
 ---
 import '../styles/global.css';
-import Header from '../components/layout/header.astro';
-import Footer from '../components/layout/footer.astro';
-const { title = "Horus Chemical" } = Astro.props;
+import Header from '../components/layout/Header.astro';
+import Footer from '../components/layout/Footer.astro';
+import WhatsAppButton from '../components/layout/WhatsAppButton.astro';
+import { ClientRouter } from 'astro:transitions';
+const { title = "Osiris Quimical | Soluciones Químicas Industriales" } = Astro.props;
 ---
 
 <!doctype html>
@@ -10,13 +12,17 @@ const { title = "Horus Chemical" } = Astro.props;
 <head>
   <meta charset="utf-8" />
   <link rel="icon" type="image/svg+xml" href="favicon.ico" />
-  <link rel="icon" href="favicon.ico" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" href="/faviconn.ico" />
+  <meta name="generator" content={Astro.generator} />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Especialistas en soluciones químicas industriales, tratamiento de aguas y mantenimiento preventivo. Impulsamos la eficiencia de tu empresa con tecnología sostenible." />  
   <title>{title}</title>
 </head>
 <body class="flex flex-col min-h-screen">
-  <Header />
+  <ClientRouter />  
+  <Header transition:persist />
   <slot/>
+  <WhatsAppButton />
   <Footer />
 </body>
 </html>

@@ -1,0 +1,61 @@
+---
+import sprite from "../../assets/icons/spritecss.svg?url";
+import Button from "../ui/Button.astro";
+
+const ChevronDown = "--x: 100%; --y: 50%;";
+
+const maskBase = `mask-image: url(${sprite}); 
+-webkit-mask-image: url(${sprite}); 
+mask-size: 300% 300%; 
+-webkit-mask-size: 300% 300%; 
+mask-repeat: no-repeat; 
+-webkit-mask-repeat: no-repeat;`;
+
+interface Props {
+  id?:string;
+  img?:string;
+  title?:string;
+  text?:string;
+}
+
+const {
+  id,
+  img,
+  title,
+  text
+}=Astro.props
+---
+
+<section class="grow flex relative items-center overflow-hidden min-h-screen justify-center">
+  <div class="absolute inset-0 bg-black/50 z-10"></div>
+  <img
+    src={img}
+    loading="eager"
+    fetchpriority="high"
+    alt="Innovation in chemical solutions"
+    class="absolute inset-0 h-full w-full object-cover -z-10"/>
+  <div class="flex flex-col relative z-10">
+    <div class="max-w-7xl px-6 text-hc-herotitle lg:px-8">
+      <div class="max-w-2xl mx-auto">
+        <h1 class="text-4xl text-center font-bold tracking-tight sm:text-6xl">
+          {title}
+        </h1>
+      </div>
+    </div>
+    <div class="max-w-7xl px-6 lg:px-8 mt-15">
+      <div class="max-w-2xl mx-auto flex flex-col items-center text-hc-herotitle">
+        <span class="mb-2 font-medium">{text}</span>
+        <Button 
+          aria-label="Learn more about our chemical services"
+          targetId={id}
+          action="scroll"
+          class="text-hc-primary scroll-button hover:scale-110 transition-transform group">
+          <div 
+            class="w-10 h-10 bg-current inline-block animate-[bounceOnce_0.4s_ease-in-out_0.6s_forwards]" 
+            style={`${maskBase} mask-position: var(--x) var(--y); -webkit-mask-position: var(--x) var(--y); ${ChevronDown}`}>
+          </div>
+        </Button>
+      </div>
+    </div>
+  </div>
+</section>

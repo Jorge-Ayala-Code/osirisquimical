@@ -1,5 +1,5 @@
 ---
-import Navbar from './navbar.astro';
+import Navbar from './Navbar.astro';
 ---
 
 <header id="main-header" class="fixed flex justify-between top-0 left-0 w-full z-50 transition-all duration-500 bg-transparent py-6">
@@ -7,36 +7,47 @@ import Navbar from './navbar.astro';
 </header>
 
 <script>
-const header = document.getElementById('main-header')!;
-const logo = document.getElementById('header-logo') as HTMLImageElement;
-const menu = document.getElementById("nav-menu")!;
-const mobileMenu = document.getElementById('mobile-menu')!;
-const menuBtn = document.querySelector('[data-target="mobile-menu"]');
-  (window as any).handleScroll = () => {
-  if (!header || !menu || !mobileMenu || !logo) return;
-    const isScrolled = window.scrollY > 50;
-  if (isScrolled) {
-    header.classList.remove('bg-transparent','py-6');
-    header.classList.add('bg-white/70','backdrop-blur-md','shadow-md','py-3');
-    menu.classList.remove("text-white");
-    menu.classList.add("text-hc-text");
-    if (menuBtn) {
-      menuBtn.classList.remove("text-white");
-      menuBtn.classList.add("text-hc-text");
+  let currentHandleScroll: (() => void) | null = null;
+  const runHeader = () => {
+    const header = document.getElementById('main-header');
+    const logo = document.getElementById('header-logo');
+    const logoWhite = document.getElementById('header-logo-white');
+    const menu = document.getElementById("nav-menu");
+    const menuBtn = document.querySelector('[data-action="menu"]');
+    if (!header || !logo || !logoWhite || !menu) return;
+    if (currentHandleScroll) {
+      window.removeEventListener('scroll', currentHandleScroll);
     }
-    logo.classList.replace('h-12','h-8');
-  } else {
-    header.classList.add('bg-transparent','py-6');
-    header.classList.remove('bg-white/70','backdrop-blur-md','shadow-md','py-3');
-    menu.classList.remove("text-hc-text");
-    menu.classList.add("text-white");
-    if (menuBtn) {
-      menuBtn.classList.remove("text-hc-text");
-      menuBtn.classList.add("text-white");
-    }
-    logo.classList.replace('h-8','h-12');
-  }
-};
-  window.addEventListener('scroll', () => (window as any).handleScroll());
-  (window as any).handleScroll();
+    const handleScroll = () => {
+      const isScrolled = window.scrollY > 50;
+      if (isScrolled) {
+        header.classList.remove('bg-transparent', 'py-6');
+        header.classList.add('bg-white/70', 'backdrop-blur-md', 'shadow-md', 'py-3');
+        menu.classList.replace('text-white', 'text-hc-text');
+        logo.classList.replace('h-12', 'h-8');
+        logoWhite.classList.add("hidden");
+        logo.classList.remove("hidden");
+        if (menuBtn) {
+          menuBtn.classList.remove('text-white');
+          menuBtn.classList.add('text-hc-text');
+        }
+      } else {
+        header.classList.add('bg-transparent', 'py-6');
+        header.classList.remove('bg-white/70', 'backdrop-blur-md', 'shadow-md', 'py-3');
+        menu.classList.replace('text-hc-text', 'text-white');
+        logo.classList.replace('h-8', 'h-12');
+        logoWhite.classList.remove("hidden");
+        logo.classList.add("hidden");
+        if (menuBtn) {
+          menuBtn.classList.remove('text-hc-text');
+          menuBtn.classList.add('text-white');
+        }
+      }
+    };
+    currentHandleScroll = handleScroll;
+    window.addEventListener('scroll', currentHandleScroll, { passive: true });
+    handleScroll();
+  };
+  document.addEventListener('astro:page-load', runHeader);
+  document.addEventListener('DOMContentLoaded', runHeader);
 </script>

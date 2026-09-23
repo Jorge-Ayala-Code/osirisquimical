@@ -1,0 +1,21 @@
+---
+import { getLangHelpers } from '../../i18n/utils';
+
+const { t } = getLangHelpers(Astro.currentLocale);
+---
+<div class="grow w-full">
+  <div class="w-full md:mt-7">
+    <div class="relative group">
+      <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+        <svg class="w-5 h-5 text-hc-text group-focus-within:text-hc-primary transition-colors" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
+        </svg>
+      </div>
+      <input 
+        type="text" 
+        id="product-search" 
+        class="block w-full p-3 pl-10 text-sm text-slate-900 border border-hc-background rounded-lg bg-hc-desing focus:ring-2 focus:ring-hc-secondary outline-none transition-all placeholder:text-hc-secondary-text/70 shadow-sm" 
+        placeholder={t('product_search')}/>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,52 @@
+---
+const lang = Astro.currentLocale || 'es';
+const { currentPath = "/" } = Astro.props;
+
+function getTransformedPath(targetLang: string) {
+  const segments = currentPath.split('/').filter(Boolean);
+  const hasLangPrefix = segments[0] === 'es' || segments[0] === 'en';
+  if (hasLangPrefix) {
+    if (targetLang === 'en') {
+      segments[0] = 'en'; 
+    } else {
+      segments.shift();
+    }
+  } else {
+    if (targetLang === 'en') {
+      segments.unshift('en');
+    }
+  }
+  const finalPath = `/${segments.join('/')}`;
+  return finalPath === '' ? '/' : finalPath;
+}
+---
+
+<li class="mt-auto pt-10">
+  <p class="text-xs opacity-40 mb-4 uppercase tracking-[0.2em] font-bold">
+    {lang === 'es' ? 'Seleccionar Idioma' : 'Select Language'}
+  </p> 
+  <div class="grid grid-cols-2 gap-4">
+    <a 
+      href={getTransformedPath('es')} 
+      class:list={[
+        "flex items-center justify-center gap-3 py-4 rounded-xl active:scale-95 transition-all",
+        lang === 'es' 
+          ? "bg-hc-secondary/20 border border-hc-secondary text-hc-secondary font-bold" 
+          : "bg-white/5 border border-white/10 text-hc-text opacity-70"
+      ]}>
+      <span>ES</span>
+      <span class="text-xs">Español</span>
+    </a>
+    <a 
+      href={getTransformedPath('en')} 
+      class:list={[
+        "flex items-center justify-center gap-3 py-4 rounded-xl active:scale-95 transition-all",
+        lang === 'en' 
+          ? "bg-hc-secondary/20 border border-hc-secondary text-hc-secondary font-bold" 
+          : "bg-white/5 border border-white/10 text-hc-text opacity-70"
+      ]}>
+      <span>EN</span>
+      <span class="text-xs">English</span>
+    </a>
+  </div>  
+</li>

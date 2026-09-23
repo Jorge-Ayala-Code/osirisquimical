@@ -1,0 +1,32 @@
+---
+import MainLayout from '../../layouts/MainLayout.astro';
+import Hero from "../../components/ui/Hero.astro";
+import Section from "../../components/ui/Section.astro";
+import Certificated from "../../components/about/Certificated.astro";
+import MVV from "../../components/about/MisionVisionValues.astro"
+import Policy from "../../components/about/QualityPolicy.astro"
+import Map from "../../components/about/Presence.astro"
+import { getLangHelpers } from '../../i18n/utils';
+
+const { t, l, lang } = getLangHelpers(Astro.currentLocale);
+---
+
+<MainLayout>
+  <Hero
+    id="nosotros"
+    img='/../src/assets/images/heros/hero-about.webp' 
+    title={t('title_about')}
+    text=""/>
+  <Section id="nosotros" >
+    <MVV />
+  </Section>
+  <Section id="quality-policy" >
+    <Policy />
+  </Section>
+    <Section id="certificated" >
+    <Certificated />
+  </Section>
+  <Section id="map">
+    <Map/>
+  </Section>
+</MainLayout> 

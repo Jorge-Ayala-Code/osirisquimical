@@ -1,7 +1,11 @@
 ---
 import sprite from "../../assets/icons/spritecss.svg?url";
 import Button from "../ui/Button.astro";
+import Language from "./language.astro";
+import LanguageMovil from "./languageMovil.astro";
+import { getLangHelpers } from '../../i18n/utils';
 
+const { t, l } = getLangHelpers(Astro.currentLocale);
 const CrossOut = "--x: 50%; --y: 100%;";
 const Burger = "--x: 100%; --y: 100%;";
 
@@ -15,34 +19,101 @@ mask-repeat: no-repeat;
 mask-position: var(--x) var(--y); 
 -webkit-mask-position: var(--x) var(--y);`;
 
-const menu = [
-  { href: "/about", name: "Nosotros" },
-  { href: "/products", name: "Productos" },
-  { href: "/services", name: "Servicios" },
-  { href: "/contact", name: "Contacto" }
+interface MenuItem {
+  href: string;
+  name: string;
+  subItems?: subItem[]; 
+}
+
+interface subItem {
+  name?: string;
+  href?: string;
+  slug?: string;
+}
+
+const menu: MenuItem[] = [
+  { href: l("/about"), name: t("nav_about") },
+  { 
+    href: l("/products"), 
+    name: t("nav_products")
+  },
+  { href: l("/services"), name: t("nav_services") },
+  { href: l("/contact"), name: t("nav_contact") }
 ];
+
+const pathname = new URL(Astro.url).pathname;
+const currentPath = pathname.replace(/\/$/, "") || "/";
 ---
- 
-<nav class="container max-w-225 mx-auto px-4 h-16 flex items-center justify-between">
-  <a href="/" id="header-logo" class="flex items-center">
+
+<nav aria-label="Main Menu" class="container max-w-225 mx-auto px-4 h-16 flex items-center justify-between">
+  <a href={l(`/`)} id="header-logo" class="items-center hidden">
     <img 
-      src="../src/assets/images/Logo-Horus.svg" 
-      alt="Horus Chemical Logo" 
+      width="150"   
+      height="50"
+      fetchpriority="high" 
+      loading="eager"
+      src="/../src/assets/images/logos/Logo-Osiris.png" 
+      alt="Osiris Qhimical Logo" 
+      class="h-8 w-auto md:h-12 transition-all"/>
+  </a>
+  <a href={l(`/`)} id="header-logo-white" class="items-center">
+    <img 
+      width="150" 
+      height="50"
+      fetchpriority="high" 
+      loading="eager"
+      src="/../src/assets/images/logos/Logo-Osiris-white.png" 
+      alt="Osiris Qhimical Logo White" 
       class="h-8 w-auto md:h-12 transition-all"/>
   </a>
   <ul id="nav-menu" class="hidden text-hc-text md:flex space-x-8 font-medium">
-    {menu.map((item) => (
-      <li><a href={item.href} class="hover:text-hc-secondary transition">{item.name}</a></li>
-    ))}
+      {menu.map((item) => {
+      const isActive = currentPath === item.href.replace(/\/$/, "") || (currentPath === "/" && item.href === "/");
+      return (
+        // CAMBIO AQUÍ: Evaluamos por la ruta en lugar del texto traducido
+        item.href.includes("/products") ? (
+          <li class="relative group">
+            <a 
+              href={item.href} 
+              class={`hover:text-hc-secondary transition py-6 flex items-center gap-1 ${isActive ? "text-hc-secondary font-bold" : ""}`}>
+              {item.name}
+            </a>
+            <div class="absolute top-full left-0 w-40 bg-hc-desing/80 shadow-xl rounded-b-xl opacity-0 invisible translate-y-2 group-hover:opacity-100 group-hover:visible group-hover:translate-y-0 transition-all duration-300 z-50 overflow-hidden">
+              <div class="flex flex-col">
+                {item.subItems?.map((sub) => {
+                  return (
+                    <a 
+                      href={sub.href} 
+                      class="px-3 py-3 text-hc-text hover:bg-hc-desing/80 hover:text-hc-secondary last:border-0 transition-colors">
+                      {sub.name}
+                    </a>
+                  )
+                })}
+              </div>
+            </div>
+          </li>
+        ) : (
+          <li>
+            <a 
+              href={item.href} 
+              class={`hover:text-hc-secondary transition py-6 block ${isActive ? "text-hc-secondary font-bold" : ""}`}>
+              {item.name}
+            </a>
+          </li>
+        )
+      )
+    })}
+    <Language currentPath={currentPath} />
   </ul>
-  <div id="mobile-menu" class="absolute top-21 min-h-screen left-0 w-full bg-white/90 backdrop-blur-lg border-b border-gray-200 shadow-lg md:hidden pointer-events-none opacity-0 -translate-y-4 transition-all duration-300 ease-out">
+  <div id="mobile-menu" class="absolute top-21 min-h-screen left-0 w-full bg-hc-desing/90 backdrop-blur-lg border-b border-hc-banner shadow-lg md:hidden pointer-events-none opacity-0 -translate-y-4 transition-all duration-300 ease-out">
     <ul class="flex flex-col p-2 space-y-7 m-7 text-lg font-medium text-hc-text">
       {menu.map((item) => (
         <li><a href={item.href} class="block pb-2">{item.name}</a></li>
       ))}
     </ul>
+    <LanguageMovil currentPath={currentPath} />
   </div>
-  <Button targetId="mobile-menu" action="menu" class="md:hidden flex items-center justify-center">
+  <Button aria-label="Open Main Menu" targetId="mobile-menu" action="menu" class="md:hidden flex items-center justify-center">
     <div 
       id="menu-icon-burger"
       class="menu-icon w-7 h-7 bg-current transition-colors duration-300" 

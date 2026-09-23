@@ -1,17 +1,50 @@
-<h2 class="text-2xl font-bold tracking-tight text-hc-text sm:text-3xl">
-  ¿Qué puede hacer <span class='text-hc-primary'>Horus Chemical</span> por tu empresa?
+---
+import Button from "../ui/Button.astro";
+import { getLangHelpers } from '../../i18n/utils';
+const { t, l } = getLangHelpers(Astro.currentLocale);
+---
+
+<h2 class="text-3xl font-bold tracking-tight text-hc-text sm:text-4xl">
+  {t('welcome_title1')}<span class='text-hc-primary'>{t('name')}</span>{t('welcome_title2')}
 </h2>
-<p class="flex gap-2 mt-6 text-lg leading-8 text-hc-secondary-text">
-  En Horus Chemical impulsamos la eficiencia de tus procesos industriales mediante soluciones químicas especializadas y servicios técnicos profesionales.
+<p class="mt-6 text-xl leading-8 text-hc-secondary-text">
+  {t('welcome_subtitle')}
 </p>
-<ul class="list-inside mt-6 space-y-3 text-hc-secondary-text">
-  <li><strong>Tratamiento de aguas:</strong> Control, estabilidad y cumplimiento normativo garantizado.</li>
-  <li><strong>Limpieza y acabados:</strong> Mayor calidad en tus procesos y productos finales.</li>
-  <li><strong>Lubricantes minerales y sintéticos:</strong> Mayor vida útil de maquinaria y reducción de tiempos de paro.</li>
-  <li><strong>Servicios de mantenimiento industrial preventivo y correctivo:</strong> Continuidad operativa y soporte técnico confiable.</li>
-</ul>
-<div class="mt-8 space-y-4 text-lg leading-8 text-hc-secondary-text">
-  <p>Más que un proveedor, somos un aliado estratégico comprometido con resultados medibles y mejora continua.</p>
-  <p>Optimizamos tu cadena de valor mediante un Sistema de Gestión de Calidad que garantiza resultados medibles. Reducimos tus costos operativos y aseguramos la continuidad de tu planta con soporte técnico.</p>
-  <p class="font-semibold text-hc-text italic">Eficiencia operativa, reducción de costos y soluciones confiables para tu industria.</p>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-10">
+  <div class="p-4 border-l-4 border-hc-primary bg-white">
+    <h3 class="font-bold text-hc-text">{t('welcome_card1_title')}</h3>
+    <p class="text-hc-secondary-text text-sm">{t('welcome_card1_text')}</p>
+  </div>
+  <div class="p-4 border-l-4 border-hc-primary bg-white">
+    <h3 class="font-bold text-hc-text">{t('welcome_card2_title')}</h3>
+    <p class="text-hc-secondary-text text-sm">{t('welcome_card2_text')}</p>
+  </div>
+  <div class="p-4 border-l-4 border-hc-primary bg-white">
+    <h3 class="font-bold text-hc-text">{t('welcome_card3_title')}</h3>
+    <p class="text-hc-secondary-text text-sm">{t('welcome_card3_text')}</p>
+  </div>
+  <div class="p-4 border-l-4 border-hc-primary bg-white">
+    <h3 class="font-bold text-hc-text">{t('welcome_card4_title')}</h3>
+    <p class="text-hc-secondary-text text-sm">{t('welcome_card4_text')}</p>
+  </div>
+</div>
+<div class="mt-10 p-6 bg-hc-banner rounded-xl">
+  <p class="text-lg font-medium text-hc-text italic">
+    {t('welcome_banner_italic')}
+  </p>
+  <p class="mt-4 text-hc-secondary-text">
+    {t('welcome_banner_p')}
+  </p>
+</div>
+<div class="flex flex-col sm:flex-row gap-4 w-full mt-10">
+  <Button 
+    href={l("/products")}
+    class="w-full bg-hc-primary hover:bg-hc-secondary text-white relative z-10 text-center py-4 rounded-md font-semibold shadow-md">
+    {t('welcome_btn_products')}
+  </Button>
+  <Button 
+    href={l("/services")}
+    class="w-full bg-hc-primary hover:bg-hc-secondary text-white relative z-10 text-center py-4 rounded-md font-semibold shadow-md">
+    {t('welcome_btn_services')}
+  </Button>
 </div>
