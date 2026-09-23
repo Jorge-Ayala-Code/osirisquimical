@@ -1,13 +1,11 @@
 import { defineCollection, z } from 'astro:content';
+import { productsData } from './products/products';
 
 const products = defineCollection({
-  loader: async () => {
-    const { productsData } = await import('./products/products'); 
-    return productsData.map((product) => ({
-      ...product,
-      id: product.id 
-    }));
-  },
+  loader: () => productsData.map((product) => ({
+    ...product,
+    id: product.id 
+  })),
   schema: z.object({
     id: z.string(),
     productId: z.string(),
